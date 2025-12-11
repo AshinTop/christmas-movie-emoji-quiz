@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Button } from './Button';
-import ScrollToTopButton from './ScrollToTopButton'
 import { useLanguage } from '../contexts/LanguageContext';
 import { getLocalLeaderboard, clearLeaderboard } from '../services/leaderboardService';
 import { LeaderboardEntry } from '../types';
 import html2canvas from 'html2canvas';
+import { logEvent } from '../services/analytics';
+import ScrollToTopButton from './ScrollToTopButton'
 
 interface WelcomeScreenProps {
   onStart: (username: string) => void;
@@ -68,6 +69,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   const handleDownloadImage = async () => {
     if (!leaderboardRef.current || isGenerating) return;
     setIsGenerating(true);
+    logEvent('file_download', { file_name: 'leaderboard.png', file_extension: 'png' });
 
     try {
       const canvas = await html2canvas(leaderboardRef.current, {
@@ -90,6 +92,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   };
 
   const handleShareLeaderboard = async () => {
+    logEvent('share', { method: 'native', content_type: 'leaderboard' });
     if (navigator.share) {
       try {
         await navigator.share({
@@ -108,6 +111,10 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
         // Fallback
       }
     }
+  };
+
+  const handleSocialClick = (platform: string) => {
+    logEvent('share', { method: platform, content_type: 'app_link' });
   };
 
   // Helper to render Markdown-like bold text
@@ -180,6 +187,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`} 
               target="_blank" 
               rel="noopener noreferrer"
+              onClick={() => handleSocialClick('twitter')}
               className="p-3 bg-black/40 rounded-full hover:bg-[#1DA1F2] transition-colors text-white"
               aria-label="Share on Twitter"
             >
@@ -189,6 +197,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
               href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`} 
               target="_blank" 
               rel="noopener noreferrer"
+              onClick={() => handleSocialClick('facebook')}
               className="p-3 bg-black/40 rounded-full hover:bg-[#4267B2] transition-colors text-white"
               aria-label="Share on Facebook"
             >
@@ -196,6 +205,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
             </a>
             <a 
               href={`mailto:?subject=${encodeURIComponent(t('title'))}&body=${encodeURIComponent(shareText + ' ' + shareUrl)}`}
+              onClick={() => handleSocialClick('email')}
               className="p-3 bg-black/40 rounded-full hover:bg-green-600 transition-colors text-white"
               aria-label="Share via Email"
             >
@@ -204,8 +214,12 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
           </div>
         </div>
 
-       <ScrollToTopButton/>
+        <div className="absolute bottom-10 animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition-opacity" onClick={() => window.scrollTo({top: window.innerHeight, behavior: 'smooth'})}>
+           <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+        </div>
       </div>
+
+      <ScrollToTopButton/>
 
       {/* Info Sections Container */}
       <div className="w-full bg-gradient-to-b from-transparent to-christmas-dark/90 pb-20">

@@ -1,3 +1,4 @@
+
 export type Language = 'zh' | 'en';
 
 export interface MovieQuestion {
@@ -40,3 +41,11 @@ export const TOTAL_GAME_TIME = 300; // 5 Minutes in seconds
 export const POINTS_EASY = 500;
 export const POINTS_MEDIUM = 1000;
 export const POINTS_HARD = 1500;
+
+// Add global type definition for Google Analytics
+declare global {
+  interface Window {
+    dataLayer: any[];
+    gtag: (...args: any[]) => void;
+  }
+}

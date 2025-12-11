@@ -8,6 +8,7 @@ import { GameScreen } from './components/GameScreen';
 import { GameOverScreen } from './components/GameOverScreen';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { logEvent } from './services/analytics';
 
 // Create a wrapper component for the main content to use the hook
 const GameContent: React.FC = () => {
@@ -28,6 +29,11 @@ const GameContent: React.FC = () => {
       // Only save score if we aren't already gameover (prevents double save race conditions)
       if (prev.status !== 'gameover') {
         saveScore(prev.username, prev.score);
+        logEvent('level_end', {
+            level_name: 'Main Quiz',
+            success: true,
+            score: prev.score
+        });
       }
       return { ...prev, status: 'gameover', globalTimeLeft: 0 };
     });
@@ -43,6 +49,11 @@ const GameContent: React.FC = () => {
           if (prev.globalTimeLeft <= 1) {
             // Time's up
             saveScore(prev.username, prev.score);
+            logEvent('level_end', {
+                level_name: 'Main Quiz',
+                success: false, // Time ran out
+                score: prev.score
+            });
             return { ...prev, globalTimeLeft: 0, status: 'gameover' };
           }
           return { ...prev, globalTimeLeft: prev.globalTimeLeft - 1 };
@@ -55,6 +66,7 @@ const GameContent: React.FC = () => {
 
   const startGame = async (username: string) => {
     setGameState(prev => ({ ...prev, status: 'loading', username }));
+    logEvent('level_start', { level_name: 'Main Quiz' });
     
     try {
       const questions = await fetchChristmasMovies();
@@ -92,6 +104,11 @@ const GameContent: React.FC = () => {
       if (isLastQuestion) {
         // If run out of questions (unlikely with 100), end game
         saveScore(prev.username, newScore);
+        logEvent('level_end', {
+            level_name: 'Main Quiz',
+            success: true,
+            score: newScore
+        });
         return {
           ...prev,
           score: newScore,
