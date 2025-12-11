@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Christmas Movie Emoji Quiz - The Ultimate Holiday Game</title>
+    <meta name="description" content="Test your holiday movie knowledge! Guess the Christmas movie from the emoji clues in this festive 5-minute time attack game. Perfect for parties and family fun.">
+    <meta name="keywords" content="Christmas, Movie Quiz, Emoji Game, Holiday Party Game, Christmas Trivia, Home Alone, Elf, Grinch">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎅</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Noto Sans SC"', 'sans-serif'],
+            },
+            colors: {
+              christmas: {
+                red: '#D42426',
+                green: '#165B33',
+                gold: '#F8B229',
+                snow: '#F0F2F5',
+                dark: '#0B0F19'
+              }
+            },
+            animation: {
+              'bounce-slow': 'bounce 3s infinite',
+              'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'wiggle': 'wiggle 0.5s ease-in-out infinite',
+            },
+            keyframes: {
+              wiggle: {
+                '0%, 100%': { transform: 'rotate(-3deg)' },
+                '50%': { transform: 'rotate(3deg)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #0B0F19;
+        color: #F0F2F5;
+      }
+      /* Snowflake effect using CSS */
+      .snowflake {
+        color: #fff;
+        font-size: 1em;
+        font-family: Arial, sans-serif;
+        text-shadow: 0 0 5px #000;
+        position: fixed;
+        top: -10%;
+        z-index: 9999;
+        user-select: none;
+        cursor: default;
+        animation-name: snowflakes-fall, snowflakes-shake;
+        animation-duration: 10s, 3s;
+        animation-timing-function: linear, ease-in-out;
+        animation-iteration-count: infinite, infinite;
+        animation-play-state: running, running;
+      }
+      @keyframes snowflakes-fall {
+        0% { top: -10%; }
+        100% { top: 100%; }
+      }
+      @keyframes snowflakes-shake {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(80px); }
+      }
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #0B0F19;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #165B33;
+        border-radius: 5px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #D42426;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.1/",
+    "react/": "https://esm.sh/react@^19.2.1/",
+    "react": "https://esm.sh/react@^19.2.1",
+    "canvas-confetti": "https://esm.sh/canvas-confetti@^1.9.4",
+    "html2canvas": "https://esm.sh/html2canvas@^1.4.1"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <!-- Decorative snowflakes -->
+    <div class="snowflake" style="left: 10%; animation-delay: 0s, 0s">❅</div>
+    <div class="snowflake" style="left: 20%; animation-delay: 1s, 1s">❆</div>
+    <div class="snowflake" style="left: 30%; animation-delay: 6s, .5s">❅</div>
+    <div class="snowflake" style="left: 40%; animation-delay: 4s, 2s">❆</div>
+    <div class="snowflake" style="left: 50%; animation-delay: 2s, 2s">❅</div>
+    <div class="snowflake" style="left: 60%; animation-delay: 8s, 3s">❆</div>
+    <div class="snowflake" style="left: 70%; animation-delay: 6s, 2s">❅</div>
+    <div class="snowflake" style="left: 80%; animation-delay: 2.5s, 1s">❆</div>
+    <div class="snowflake" style="left: 90%; animation-delay: 1s, 0s">❅</div>
+  </body>
+</html>
